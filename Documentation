@@ -1,0 +1,28 @@
+1) AI input interpretation:
+    The program uses a simple neural network which takes into consideration which words are in the input and which arent.
+So it basically takes ALL words that it is fed in training and counts them individually, then creates an array that has the same length.
+For example, if you fed it 5 words during training, then the array would look like: [0, 0, 0, 0, 0] and then if one of those words appears
+in the prediction input that 0 would turn into a 1. That is what you feed it in the input layer, then it passes through 2 hidden layers and
+selects a command to execute plus a phrase to say.
+
+2) Speech recognition and emulator:
+    To keep things simple we are using the Google speech recognition API and also it's text to speech as they are pretty reliable and
+simple to implement
+
+3) Packets and networking:
+    Packets are basically json files sent over sockets, from here you could have the most basic packet:
+    -Target   :     Mac Address of the device you are trying to reach
+    -Sender   :     Mac Address of who is sending the command (for security and loggin porposes)
+    -Type     :     What are we trying to do in the other machine or server (Login, ack, msg, command, etc)
+    -Data     :     Here goes the heavy part, either code, files, commands, messages, etc.
+As it is a json file you could add whatever labels you want to the "dictionary" and it would not affect the interpterer,
+since it would not be looking into the labels it does not need.
+
+4) Server and client:
+    The server is coded in python and hosted in port 1404. The main functionality of it is to connect devices with eachother and save
+temporal files. Here we also process all the AI so it basically carries on the two most heavy tasks: AI and processing.
+    On a more technical note, for clients to login into a server they need to send a "login" type packet, if the "data" of this packet
+matches the password saved for that "sender" then it will be added to the managed connections and such device will be able to control the
+server and its devices.
+    Also, it is a TCP connection, so for whatever packet is received a new one with the same "data" but with "type: login: will be sent
+back, if the data is the same than the original packet then the communication ends.
